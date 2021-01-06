@@ -24,8 +24,10 @@ Client side script 将URL中的somebody参数作为**spaghet**的innerHTML。因
 
 **答案**
 
+```html
 * <img src="x" onerror="alert(1337)">
 * <svg onload="alert(1337)"/>
+```
 
 2. Jefff
 
@@ -76,8 +78,10 @@ Client side script将参数 wey 插入到<input>中国作为属性placeholder的
 
 **答案**
 
+```html
 * " onfocus=alert(1337) autofocus="
 * " onclick="alert(1337)
+```
 
 4. Ricardo Milos
 
@@ -98,11 +102,14 @@ Client side script将参数 wey 插入到<input>中国作为属性placeholder的
 
 **问题分析**
 
-<script>标签中的代码将 ricardo 参数赋值给 ricardo form 的 action。[HTML Form](https://www.w3schools.com/tags/att_form_action.asp)
+script标签中的代码将 ricardo 参数赋值给 ricardo form 的 action。[HTML Form](https://www.w3schools.com/tags/att_form_action.asp)
 的 action 属性是一个URL。如果它包含了javascript协议号，则其后的代码会被浏览器执行，可参考
-[RULE#7 - Avoid Javascript URLs](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)。
+[RULE#7 - Avoid Javascript URLs](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)
 
 **答案**
 
+```html
 * javascript:alert(1337)
+```
+
 
